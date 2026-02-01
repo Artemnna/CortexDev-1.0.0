@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CortexDev — Software Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --text-primary: #ffffff;
+            --text-secondary: #999999;
+            --accent: #ffffff;
+            --border: #222222;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --accent: #000000;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        #grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        #interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2em;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .logo span {
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        nav {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        .header-contact-btn {
+            padding: 10px 24px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.3px;
+        }
+
+        .header-contact-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 5em;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 50px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95em;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+        }
+
+        .section {
+            padding: 120px 0;
+            border-top: 1px solid var(--border);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3em;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1em;
+            color: var(--text-secondary);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .skill-card {
+            background: var(--bg-primary);
+            padding: 60px 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.4s ease;
+        }
+
+        .skill-card:hover::before {
+            width: 100%;
+        }
+
+        .skill-card:hover {
+            background: var(--bg-secondary);
+        }
+
+        .skill-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .skill-card h3 {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .skill-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .project-item {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            align-items: start;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-item:hover {
+            padding-left: 20px;
+        }
+
+        .project-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--text-secondary);
+            line-height: 1;
+        }
+
+        .project-content h3 {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .project-content p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            margin-bottom: 80px;
+        }
+
+        .stat-item {
+            background: var(--bg-primary);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 4em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact {
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 4em;
+            font-weight: 700;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        .contact p {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-link:hover {
+            color: var(--text-primary);
+            border-bottom-color: var(--text-primary);
+        }
+
+        footer {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--text-primary);
+            width: 0;
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 0 40px;
+            }
+
+            .hero h1 {
+                font-size: 3.5em;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-item {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 24px;
+            }
+
+            header {
+                padding: 24px 0;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .header-contact-btn {
+                display: none;
+            }
+
+            .hero {
+                min-height: 70vh;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .section {
+                padding: 80px 0;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+
+            .section-header {
+                margin-bottom: 50px;
+            }
+
+            .skill-card {
+                padding: 40px 30px;
+            }
+
+            .project-item {
+                padding: 40px 0;
+            }
+
+            .contact h2 {
+                font-size: 2.5em;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    <canvas id="interactive-bg"></canvas>
+    <div id="grid-background"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                CortexDev<span>/</span>
+            </div>
+            <nav>
+                <a href="#skills">Навыки</a>
+                <a href="#projects">Проекты</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+            <div class="header-right">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+                <a href="#contact" class="header-contact-btn">Связаться</a>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-label">Software Developer</div>
+                <h1>
+                    Создаю<br>
+                    <span>цифровые</span><br>
+                    продукты
+                </h1>
+                <p>
+                    Разрабатываю масштабируемые веб-приложения и интерфейсы, 
+                    которые решают реальные бизнес-задачи. Специализируюсь на 
+                    современных технологиях и best practices.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary">Портфолио</a>
+                    <a href="#contact" class="btn btn-secondary">Написать</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="skills">
+            <div class="section-header">
+                <h2 class="section-title">Технологии</h2>
+                <span class="section-number">01</span>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-card fade-in delay-1">
+                    <div class="skill-number">01</div>
+                    <h3>Frontend Development</h3>
+                    <p>React, TypeScript, Next.js, Vue.js, Tailwind CSS. Создание производительных SPA и SSR приложений с фокусом на UX и accessibility.</p>
+                </div>
+                <div class="skill-card fade-in delay-2">
+                    <div class="skill-number">02</div>
+                    <h3>Backend Engineering</h3>
+                    <p>Node.js, Express, Python, Django, REST API, GraphQL. Проектирование масштабируемых серверных архитектур и microservices.</p>
+                </div>
+                <div class="skill-card fade-in delay-3">
+                    <div class="skill-number">03</div>
+                    <h3>Database & DevOps</h3>
+                    <p>PostgreSQL, MongoDB, Redis, Docker, Kubernetes, CI/CD. Оптимизация производительности и автоматизация процессов deployment.</p>
+                </div>
+                <div class="skill-card fade-in delay-4">
+                    <div class="skill-number">04</div>
+                    <h3>Mobile & Cloud</h3>
+                    <p>React Native, Flutter, AWS, Google Cloud, Vercel. Разработка кроссплатформенных мобильных приложений и cloud-native решений.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="projects">
+            <div class="section-header">
+                <h2 class="section-title">Избранные проекты</h2>
+                <span class="section-number">02</span>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Проектов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Лет опыта</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">Клиентов</div>
+                </div>
+            </div>
+
+            <div class="projects-list">
+                <div class="project-item">
+                    <div class="project-number">01</div>
+                    <div class="project-content">
+                        <h3>E-commerce Platform</h3>
+                        <p>Полнофункциональная платформа электронной коммерции с интеграцией платежных систем, CMS для управления каталогом, системой аналитики и мобильным приложением.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">Stripe</span>
+                            <span class="tag">AWS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-number">02</div>
+                    <div class="project-content">
+                        <h3>Real-time Analytics Dashboard</h3>
+                        <p>Интерактивная панель мониторинга с визуализацией данных в реальном времени, настраиваемыми виджетами и системой уведомлений для business intelligence.</p>
+                        <div class="project-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">D3.js</span>
+                            <span class="tag">WebSocket</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">Redis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-number">03</div>
+                    <div class="project-content">
+                        <h3>Collaborative Task Manager</h3>
+                        <p>SaaS-платформа для управления проектами с функциями real-time collaboration, Kanban boards, time tracking и интеграциями с популярными сервисами.</p>
+                        <div class="project-tags">
+                            <span class="tag">Next.js</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">GraphQL</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Docker</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section contact" id="contact">
+            <h2>Начнём сотрудничество</h2>
+            <p>
+                Открыт для интересных проектов и новых возможностей. 
+                Свяжитесь со мной для обсуждения вашей идеи.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:hello@cortexdev.ru" class="contact-link">hello@cortexdev.ru</a>
+                <a href="https://github.com" class="contact-link">GitHub</a>
+                <a href="https://linkedin.com" class="contact-link">LinkedIn</a>
+                <a href="https://telegram.org" class="contact-link">Telegram</a>
+            </div>
+        </section>
+
+        <footer>
+            <div>&copy; 2026 CortexDev. Все права защищены</div>
+            <div class="footer-social">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+                <a href="https://telegram.org" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+                <a href="mailto:hello@cortexdev.ru" aria-label="Email">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Scroll indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Project items hover effect
+        document.querySelectorAll('.project-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.paddingLeft = '40px';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.paddingLeft = '0';
+            });
+        });
+
+        // Enhanced Interactive particle background
+        const canvas = document.getElementById('interactive-bg');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const particleCount = 150;
+        const mouse = { x: null, y: null, radius: 150 };
+        let mouseVelocity = { x: 0, y: 0 };
+        let lastMouse = { x: null, y: null };
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2.5 + 1;
+                this.density = (Math.random() * 40) + 5;
+            }
+
+            update() {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const forceDirectionX = dx / distance;
+                const forceDirectionY = dy / distance;
+                const maxDistance = mouse.radius;
+                
+                if (distance < maxDistance && mouse.x !== null) {
+                    const force = (maxDistance - distance) / maxDistance;
+                    const directionX = forceDirectionX * force * this.density * 0.8;
+                    const directionY = forceDirectionY * force * this.density * 0.8;
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    if (this.x !== this.baseX) {
+                        const dx = this.x - this.baseX;
+                        this.x -= dx / 15;
+                    }
+                    if (this.y !== this.baseY) {
+                        const dy = this.y - this.baseY;
+                        this.y -= dy / 15;
+                    }
+                }
+
+                this.baseX += this.vx;
+                this.baseY += this.vy;
+
+                if (this.baseX < 0) this.baseX = canvas.width;
+                if (this.baseX > canvas.width) this.baseX = 0;
+                if (this.baseY < 0) this.baseY = canvas.height;
+                if (this.baseY > canvas.height) this.baseY = 0;
+            }
+
+            draw() {
+                const theme = document.documentElement.getAttribute('data-theme');
+                
+                // Main particle
+                ctx.fillStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Glow effect near mouse
+                if (mouse.x !== null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        const intensity = 1 - (distance / mouse.radius);
+                        ctx.fillStyle = theme === 'light' 
+                            ? `rgba(0, 0, 0, ${intensity * 0.4})` 
+                            : `rgba(255, 255, 255, ${intensity * 0.4})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connect() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        const opacity = 1 - (distance / 150);
+                        
+                        let nearMouse = false;
+                        if (mouse.x !== null) {
+                            const dist1 = Math.sqrt(Math.pow(mouse.x - particles[i].x, 2) + Math.pow(mouse.y - particles[i].y, 2));
+                            const dist2 = Math.sqrt(Math.pow(mouse.x - particles[j].x, 2) + Math.pow(mouse.y - particles[j].y, 2));
+                            nearMouse = dist1 < mouse.radius || dist2 < mouse.radius;
+                        }
+                        
+                        if (nearMouse) {
+                            ctx.strokeStyle = theme === 'light' 
+                                ? `rgba(0, 0, 0, ${opacity * 0.5})` 
+                                : `rgba(255, 255, 255, ${opacity * 0.5})`;
+                            ctx.lineWidth = 2;
+                        } else {
+                            ctx.strokeStyle = theme === 'light' 
+                                ? `rgba(0, 0, 0, ${opacity * 0.2})` 
+                                : `rgba(255, 255, 255, ${opacity * 0.2})`;
+                            ctx.lineWidth = 1;
+                        }
+                        
+                        ctx.globalAlpha = opacity;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            }
+        }
+
+        function drawMouseCircle() {
+            if (mouse.x !== null && mouse.y !== null) {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
+                
+                if (theme === 'light') {
+                    gradient.addColorStop(0, 'rgba(0, 0, 0, 0.05)');
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                } else {
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.05)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                }
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Outer ring
+                ctx.strokeStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            connect();
+            drawMouseCircle();
+            
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        // Mouse tracking with velocity
+        window.addEventListener('mousemove', (e) => {
+            if (lastMouse.x !== null) {
+                mouseVelocity.x = e.x - lastMouse.x;
+                mouseVelocity.y = e.y - lastMouse.y;
+            }
+            
+            mouse.x = e.x;
+            mouse.y = e.y;
+            lastMouse.x = e.x;
+            lastMouse.y = e.y;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+            lastMouse.x = null;
+            lastMouse.y = null;
+        });
+
+        // Click burst effect
+        canvas.addEventListener('click', (e) => {
+            const burstCount = 15;
+            for (let i = 0; i < burstCount; i++) {
+                const angle = (Math.PI * 2 * i) / burstCount;
+                const particle = new Particle();
+                particle.x = e.clientX;
+                particle.y = e.clientY;
+                particle.baseX = e.clientX + Math.cos(angle) * 150;
+                particle.baseY = e.clientY + Math.sin(angle) * 150;
+                particle.size = Math.random() * 3 + 2;
+                particles.push(particle);
+                
+                setTimeout(() => {
+                    const index = particles.indexOf(particle);
+                    if (index > -1) particles.splice(index, 1);
+                }, 1500);
+            }
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+    </script>
+</body>
+</html>
